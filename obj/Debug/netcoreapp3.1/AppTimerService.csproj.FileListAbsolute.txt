@@ -38,3 +38,4 @@ C:\Evan\Repos\C#\Services\AppTimerService\obj\Debug\netcoreapp3.1\AppTimerServic
 C:\Evan\Repos\C#\Services\AppTimerService\obj\Debug\netcoreapp3.1\AppTimerService.csproj.CopyComplete
 C:\Evan\Repos\C#\Services\AppTimerService\obj\Debug\netcoreapp3.1\AppTimerService.dll
 C:\Evan\Repos\C#\Services\AppTimerService\obj\Debug\netcoreapp3.1\AppTimerService.pdb
+C:\Evan\Repos\C#\Services\AppTimerService\obj\Debug\netcoreapp3.1\AppTimerService.csprojAssemblyReference.cache
