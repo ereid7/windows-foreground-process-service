@@ -19,6 +19,27 @@ namespace AppTimerService
         private readonly IDictionary<int, TrackedProcessInfo> _processIds;
         private readonly DirectoryManager _directoryManager;
 
+        // foreground manager
+        private Process _foregroundProcess;
+        private DateTime _processForegroundTime;
+
+        Process ForegroundProcess
+        {
+            get { return _foregroundProcess; }
+            set { 
+                if (_foregroundProcess?.Id != value.Id)
+                {
+                    _foregroundProcess = value;
+
+                    var duration = (DateTime.Now - _processForegroundTime).TotalSeconds;
+                    _logger.LogInformation($"Process {value.MainWindowTitle} foreground duration: {duration.ToString()}");
+
+                    _processForegroundTime = DateTime.Now;
+                    _logger.LogInformation($"Process {_foregroundProcess.MainWindowTitle} in FOREGROUND");
+                }
+            }
+        }
+
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
@@ -64,7 +85,7 @@ namespace AppTimerService
 
                 // foreground tracking
 
-                _logger.LogInformation($"Process {ProcessUtils.getForegroundProcess().MainWindowTitle} in FOREGROUND");
+                ForegroundProcess = ProcessUtils.getForegroundProcess();
 
                 await Task.Delay(1000, stoppingToken);
             }
