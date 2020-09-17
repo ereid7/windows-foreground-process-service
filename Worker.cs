@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AppTimerService.Managers;
 using AppTimerService.Models;
+using AppTimerService.Utils;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -28,6 +29,7 @@ namespace AppTimerService
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // TODO initialize trackedP rocessInfo - 
+            // https://stackoverflow.com/questions/32590428/how-can-i-get-the-process-name-of-the-current-active-window-in-windows-with-wina
             while (!stoppingToken.IsCancellationRequested)
             {
                 //_logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -59,6 +61,10 @@ namespace AppTimerService
                         }
                     }
                 }
+
+                // foreground tracking
+
+                _logger.LogInformation($"Process {ProcessUtils.getForegroundProcess().MainWindowTitle} in FOREGROUND");
 
                 await Task.Delay(1000, stoppingToken);
             }
