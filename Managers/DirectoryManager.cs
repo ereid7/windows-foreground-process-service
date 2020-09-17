@@ -8,7 +8,9 @@ namespace AppTimerService.Managers
     public class DirectoryManager
     {
 
-        private readonly string _appTimerDataPath;
+        protected readonly string _appTimerDataPath;
+
+        protected string _dailyDataPath => $"{this._appTimerDataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
 
         public DirectoryManager()
         {
@@ -24,8 +26,7 @@ namespace AppTimerService.Managers
             this.verifyDailyDataDirectory();
         }
 
-        // TODO add error handling
-        private void verifyProgramDataDirectory()
+        protected void verifyProgramDataDirectory()
         {
             if (!Directory.Exists(this._appTimerDataPath))
             {
@@ -33,12 +34,12 @@ namespace AppTimerService.Managers
             }
         }
         
-        private void verifyDailyDataDirectory()
+        protected void verifyDailyDataDirectory()
         {
             var dailyDataPath = $"{this._appTimerDataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
-            if (!Directory.Exists(dailyDataPath))
+            if (!Directory.Exists(this._dailyDataPath))
             {
-                Directory.CreateDirectory(dailyDataPath);
+                Directory.CreateDirectory(this._dailyDataPath);
             }
         }
     }

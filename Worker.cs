@@ -36,6 +36,8 @@ namespace AppTimerService
 
                     _processForegroundTime = DateTime.Now;
                     _logger.LogInformation($"Process {_foregroundProcess.MainWindowTitle} in FOREGROUND");
+
+                    // TODO make call to foregroundhistorymanager which uses foregroundhistorylogger 
                 }
             }
         }
