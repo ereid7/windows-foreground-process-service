@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace AppTimerService.Managers
@@ -19,6 +20,14 @@ namespace AppTimerService.Managers
          * process came into foreground
          */
         private DateTime _processForegroundTime;
+
+        // https://gist.github.com/fjl/4080259 TODO setup event hooks
+        private delegate void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern IntPtr SetWinEventHook(int eventMin, int eventMax, IntPtr hmodWinEventProc, WinEventProc lpfnWinEventProc, int idProcess, int idThread, int dwflags);
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int UnhookWinEvent(IntPtr hWinEventHook);
+
 
         public ForegroundHistoryManager(ILogger<Worker> logger)
         {
