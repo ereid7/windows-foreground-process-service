@@ -9,34 +9,39 @@ using System.Text;
 
 namespace AppTimerService.Managers
 {
-    class ForegroundHistoryManager : DirectoryManager
+    class ForegroundProcessManager : DirectoryManager
     {
-        private ForegroundHistoryLogger _foregroundHistoryLogger;
+        private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
         private readonly ILogger<Worker> _logger;
         private Process _foregroundProcess;
+        private ProcessHelper _processHelper;
 
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
 
         /**
          * The moment of time that the current foreground
-         * process came into foreground
+         * process came into foreground  
          */
         private DateTime _processForegroundTime;
 
-        public ForegroundHistoryManager(ILogger<Worker> logger)
+        public ForegroundProcessManager(ILogger<Worker> logger)
         {
             _logger = logger;
+            _processHelper = new ProcessHelper(_logger);
             // TODO do not pass daily path, but compute each time something is logged.
-            _foregroundHistoryLogger = new ForegroundHistoryLogger(_logger);
+            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger);
+
         }
 
         // TODO have banned processids like "SearchUI" for windows menu
         public void UpdateForegroundProcess()
         {
-            var foregroundProcess = ProcessUtils.GetForegroundProcess();
+            var foregroundProcess = _processHelper.GetForegroundProcess();
+            if (foregroundProcess == null) { return; }
+
             if (_foregroundProcess == null || 
-                (foregroundProcess.Id != 0 && _foregroundProcess?.Id != foregroundProcess.Id))
+               (foregroundProcess.Id != 0 && _foregroundProcess.Id != foregroundProcess.Id))
             {
                 var lastForegroundProcess = _foregroundProcess;
                 _foregroundProcess = foregroundProcess;

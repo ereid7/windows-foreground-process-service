@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AppTimerService.Models
 {
-    public class ForegroundHistoryProcessInfo
+    public class ForegroundProcessInfo
     {
         public int Id;
         public string ProcessName;

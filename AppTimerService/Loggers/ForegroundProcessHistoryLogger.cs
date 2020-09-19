@@ -11,10 +11,10 @@ using System.Text;
 
 namespace AppTimerService.Loggers
 {
-    public class ForegroundHistoryLogger : DirectoryManager
+    public class ForegroundProcessHistoryLogger : DirectoryManager
     {
         private readonly ILogger<Worker> _logger;
-        public ForegroundHistoryLogger(ILogger<Worker> logger)
+        public ForegroundProcessHistoryLogger(ILogger<Worker> logger)
         {
             _logger = logger;
         }
@@ -25,27 +25,35 @@ namespace AppTimerService.Loggers
                                    string lastProcessName,
                                    string lastProcessDuration)
         {
-            var foregroundHistoryLog = new ForegroundHistoryLog(DateTime.Now,
+            // TODO update console logger
+            _logger.LogInformation($"{newProcessName}, {lastProcessName}");
+            var csvPath = $"{_dailyDataPath}\\ForegroundLogs.csv";
+
+            try
+            {
+                var foregroundHistoryLog = new ForegroundProcessHistoryLog(DateTime.Now,
                                                                 newProcessId,
                                                                 newProcessName,
                                                                 lastProcessId,
                                                                 lastProcessName,
                                                                 lastProcessDuration);
 
-            // TODO update console logger
-            _logger.LogInformation($"{newProcessName}, {lastProcessName}");
+                using (FileStream fs = new FileStream($"{_dailyDataPath}\\ForegroundLogs.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+                using (StreamReader sr = new StreamReader(fs))
+                using (StreamWriter sw = new StreamWriter(fs))
+                using (var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture))
+                using (var csvWriter = new CsvWriter(sw, CultureInfo.InvariantCulture))
+                {
 
-            using (FileStream fs = new FileStream($"{_dailyDataPath}\\ForegroundLogs.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
-            using (StreamReader sr = new StreamReader(fs))
-            using (StreamWriter sw = new StreamWriter(fs))
-            using (var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture))
-            using (var csvWriter = new CsvWriter(sw, CultureInfo.InvariantCulture))
+                    while (csvReader.Read()) { }
+
+                    csvWriter.WriteRecord(foregroundHistoryLog);
+                    csvWriter.NextRecord();
+                }
+            }
+            catch (Exception e)
             {
-
-                while (csvReader.Read()) { }
-
-                csvWriter.WriteRecord(foregroundHistoryLog);
-                csvWriter.NextRecord();
+                _logger.LogError(e, $"Error writing foreground process history log at {csvPath}");
             }
         }
     }

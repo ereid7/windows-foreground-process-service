@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AppTimerService.Models
 {
-    class ForegroundHistoryLog
+    class ForegroundProcessHistoryLog
     {
         public DateTime TimeStamp { get; set; }
         public int NewProcessId { get; set; }
@@ -12,7 +12,7 @@ namespace AppTimerService.Models
         public int LastProcessId { get; set; }
         public string LastProcessName { get; set; }
         public string LastProcessDuration { get; set;}
-        public ForegroundHistoryLog(DateTime timeStamp,
+        public ForegroundProcessHistoryLog(DateTime timeStamp,
                                     int newProcessId,
                                     string newProcessName,
                                     int lastProcessId,
