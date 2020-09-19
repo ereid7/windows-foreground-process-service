@@ -17,7 +17,7 @@ namespace AppTimerService.Managers
             var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             this._appTimerDataPath = $"{programDataPath}\\AppTimer";
 
-            //this.initializeDirectoryManager();
+            this.initializeDirectoryManager();
         }
 
         private void initializeDirectoryManager()

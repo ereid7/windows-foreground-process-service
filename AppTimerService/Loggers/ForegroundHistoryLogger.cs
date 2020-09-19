@@ -31,6 +31,7 @@ namespace AppTimerService.Loggers
                                                                 lastProcessId,
                                                                 lastProcessName,
                                                                 lastProcessDuration);
+            _logger.LogInformation($"{newProcessName}, {lastProcessName}");
 
             var records = new List<ForegroundHistoryLog> { foregroundHistoryLog };
 

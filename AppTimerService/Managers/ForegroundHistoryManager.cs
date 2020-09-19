@@ -15,36 +15,32 @@ namespace AppTimerService.Managers
         private readonly ILogger<Worker> _logger;
         private Process _foregroundProcess;
 
+        private readonly List<int> _ignoredProcessIds;
+        private readonly List<string> _ignoredProcessNames;
+
         /**
          * The moment of time that the current foreground
          * process came into foreground
          */
         private DateTime _processForegroundTime;
 
-        // https://gist.github.com/fjl/4080259 TODO setup event hooks
-        private delegate void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern IntPtr SetWinEventHook(int eventMin, int eventMax, IntPtr hmodWinEventProc, WinEventProc lpfnWinEventProc, int idProcess, int idThread, int dwflags);
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int UnhookWinEvent(IntPtr hWinEventHook);
-
-
         public ForegroundHistoryManager(ILogger<Worker> logger)
         {
             _logger = logger;
-            // TODO do not patah daily path, but compute each time something is logged.
+            // TODO do not pass daily path, but compute each time something is logged.
             _foregroundHistoryLogger = new ForegroundHistoryLogger(_logger);
         }
 
+        // TODO have banned processids like "SearchUI" for windows menu
         public void UpdateForegroundProcess()
         {
-            var foregroundProcess = ProcessUtils.getForegroundProcess();
-            if (_foregroundProcess?.Id != foregroundProcess.Id)
+            var foregroundProcess = ProcessUtils.GetForegroundProcess();
+            if (_foregroundProcess == null || 
+                (foregroundProcess.Id != 0 && _foregroundProcess?.Id != foregroundProcess.Id))
             {
                 var lastForegroundProcess = _foregroundProcess;
                 _foregroundProcess = foregroundProcess;
 
-                // TODO add starting log
                 if (lastForegroundProcess != null)
                 {
                     LogForegroundProcessUpdate(lastForegroundProcess, _foregroundProcess);
@@ -57,10 +53,13 @@ namespace AppTimerService.Managers
         {
             // TODO format duration
             var duration = _processForegroundTime != null ? (DateTime.Now - _processForegroundTime).TotalSeconds : 0;
+            var newProcessName = string.IsNullOrEmpty(newProcess.MainWindowTitle) ? newProcess.ProcessName : newProcess.MainWindowTitle;
+            var lastProcessName = string.IsNullOrEmpty(lastProcess.MainWindowTitle) ? lastProcess.ProcessName : lastProcess.MainWindowTitle;
+
             _foregroundHistoryLogger.LogInformation(newProcess.Id,
-                                                    newProcess.MainWindowTitle,
+                                                    newProcessName,
                                                     lastProcess.Id,
-                                                    lastProcess.MainWindowTitle,
+                                                    lastProcessName,
                                                     duration.ToString());
         }
     }
