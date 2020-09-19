@@ -31,9 +31,9 @@ namespace AppTimerService.Loggers
                                                                 lastProcessId,
                                                                 lastProcessName,
                                                                 lastProcessDuration);
-            _logger.LogInformation($"{newProcessName}, {lastProcessName}");
 
-            var records = new List<ForegroundHistoryLog> { foregroundHistoryLog };
+            // TODO update console logger
+            _logger.LogInformation($"{newProcessName}, {lastProcessName}");
 
             using (FileStream fs = new FileStream($"{_dailyDataPath}\\ForegroundLogs.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
             using (StreamReader sr = new StreamReader(fs))
