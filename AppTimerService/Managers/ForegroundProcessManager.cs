@@ -1,4 +1,5 @@
 ﻿using AppTimerService.Loggers;
+using AppTimerService.Repositories;
 using AppTimerService.Utils;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,6 +13,7 @@ namespace AppTimerService.Managers
     class ForegroundProcessManager : DirectoryManager
     {
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
+        private ForegroundProcessInfoRepository _foregroundInfoRepository;
         private readonly ILogger<Worker> _logger;
         private Process _foregroundProcess;
         private ProcessHelper _processHelper;
@@ -30,8 +32,8 @@ namespace AppTimerService.Managers
             _logger = logger;
             _processHelper = new ProcessHelper(_logger);
             // TODO do not pass daily path, but compute each time something is logged.
-            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger);
-
+            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
+            InitializeForegroundProcessInfoRepository();
         }
 
         // TODO have banned processids like "SearchUI" for windows menu
@@ -45,6 +47,7 @@ namespace AppTimerService.Managers
             {
                 var lastForegroundProcess = _foregroundProcess;
                 _foregroundProcess = foregroundProcess;
+                //lastForegroundProcess.
 
                 if (lastForegroundProcess != null)
                 {
@@ -52,6 +55,11 @@ namespace AppTimerService.Managers
                 }
                 _processForegroundTime = DateTime.Now;
             }
+        }
+
+        private void InitializeForegroundProcessInfoRepository()
+        {
+            _foregroundInfoRepository = new ForegroundProcessInfoRepository(_dailyDataPath);
         }
 
         private void LogForegroundProcessUpdate(Process lastProcess, Process newProcess)

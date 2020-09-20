@@ -28,18 +28,12 @@ namespace AppTimerService.Managers
 
         protected void verifyProgramDataDirectory()
         {
-            if (!Directory.Exists(this._appTimerDataPath))
-            {
-                Directory.CreateDirectory(this._appTimerDataPath);
-            }
+            Directory.CreateDirectory(this._appTimerDataPath);
         }
         
         protected void verifyDailyDataDirectory()
         {
-            if (!Directory.Exists(this._dailyDataPath))
-            {
-                Directory.CreateDirectory(this._dailyDataPath);
-            }
+            Directory.CreateDirectory(this._dailyDataPath);
         }
     }
 }

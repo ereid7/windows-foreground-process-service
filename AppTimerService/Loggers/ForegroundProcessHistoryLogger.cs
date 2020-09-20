@@ -11,12 +11,14 @@ using System.Text;
 
 namespace AppTimerService.Loggers
 {
-    public class ForegroundProcessHistoryLogger : DirectoryManager
+    public class ForegroundProcessHistoryLogger 
     {
         private readonly ILogger<Worker> _logger;
-        public ForegroundProcessHistoryLogger(ILogger<Worker> logger)
+        private string _directoryPath;
+        public ForegroundProcessHistoryLogger(ILogger<Worker> logger, string directoryPath)
         {
             _logger = logger;
+            _directoryPath = directoryPath;
         }
 
         public void LogInformation(int newProcessId,
@@ -27,7 +29,7 @@ namespace AppTimerService.Loggers
         {
             // TODO update console logger
             _logger.LogInformation($"{newProcessName}, {lastProcessName}");
-            var csvPath = $"{_dailyDataPath}\\ForegroundLogs.csv";
+            var csvPath = $"{_directoryPath}\\ForegroundLogs.csv";
 
             try
             {
@@ -38,7 +40,7 @@ namespace AppTimerService.Loggers
                                                                 lastProcessName,
                                                                 lastProcessDuration);
 
-                using (FileStream fs = new FileStream($"{_dailyDataPath}\\ForegroundLogs.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
+                using (FileStream fs = new FileStream($"{_directoryPath}\\ForegroundLogs.csv", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
                 using (StreamReader sr = new StreamReader(fs))
                 using (StreamWriter sw = new StreamWriter(fs))
                 using (var csvReader = new CsvReader(sr, CultureInfo.InvariantCulture))

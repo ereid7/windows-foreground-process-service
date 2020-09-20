@@ -4,11 +4,13 @@ using System.Text;
 
 namespace AppTimerService.Models
 {
-    public class ForegroundProcessInfo
+    class ForegroundProcessInfo
     {
         public int Id;
         public string ProcessName;
         public HashSet<string> WindowTitles;
-        public TimeSpan Duration;
+        public TimeSpan ForegroundDuration;
+        public TimeSpan ProcessDuration;
+        public DateTime StartTime;
     }
 }
