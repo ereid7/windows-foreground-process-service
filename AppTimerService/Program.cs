@@ -9,6 +9,7 @@ namespace AppTimerService
 {
     public class Program
     {
+        // TODO create powershell script for installing and configuring for launch at startup
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

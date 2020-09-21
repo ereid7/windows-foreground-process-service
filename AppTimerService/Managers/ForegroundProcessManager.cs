@@ -1,4 +1,5 @@
 ﻿using AppTimerService.Loggers;
+using AppTimerService.Models;
 using AppTimerService.Repositories;
 using AppTimerService.Utils;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System.Text;
 
 namespace AppTimerService.Managers
 {
+    // TODO save end time on process end
     class ForegroundProcessManager : DirectoryManager
     {
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
@@ -21,6 +23,8 @@ namespace AppTimerService.Managers
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
 
+        private Dictionary<int, ForegroundProcessInfo> _processMap;
+
         /**
          * The moment of time that the current foreground
          * process came into foreground  
@@ -29,14 +33,16 @@ namespace AppTimerService.Managers
 
         public ForegroundProcessManager(ILogger<Worker> logger)
         {
+            // TODO do not pass daily path, but compute each time something is logged.
             _logger = logger;
             _processHelper = new ProcessHelper(_logger);
-            // TODO do not pass daily path, but compute each time something is logged.
             _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
+            _processMap = new Dictionary<int, ForegroundProcessInfo>();
             InitializeForegroundProcessInfoRepository();
         }
 
         // TODO have banned processids like "SearchUI" for windows menu
+        // TODO have process setter with logic. Different method that gets foreground process
         public void UpdateForegroundProcess()
         {
             var foregroundProcess = _processHelper.GetForegroundProcess();
@@ -45,9 +51,17 @@ namespace AppTimerService.Managers
             if (_foregroundProcess == null || 
                (foregroundProcess.Id != 0 && _foregroundProcess.Id != foregroundProcess.Id))
             {
+                // update last
                 var lastForegroundProcess = _foregroundProcess;
+                // insert if new
                 _foregroundProcess = foregroundProcess;
-                //lastForegroundProcess.
+                if (_foregroundInfoRepository.GetById(_foregroundProcess.Id) == null)
+                {
+                    // create entity item, add, and update repository.
+                    // _foregroundInfoRepository.AddItem();
+                }
+
+                // updateprocessmap
 
                 if (lastForegroundProcess != null)
                 {
