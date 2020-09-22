@@ -10,19 +10,19 @@ namespace AppTimerService.Models
     {
         public int Id;
         public string ProcessName;
-        // [XmlArray("Titles")]
-        //public string[] WindowTitles;
         public string ForegroundDuration;
         public string ProcessDuration;
         public string StartTime;
+        public string EndTime;
 
-        public ForegroundProcessInfoEntity(Process process)
+        public void Initialize(Process process)
         {
             Id = process.Id;
             ProcessName = process.ProcessName;
-            ForegroundDuration = "test";
-            ProcessDuration = "test";
+            ForegroundDuration = TimeSpan.FromSeconds(0).ToString();
+            ProcessDuration = (DateTime.Now - process.StartTime).Duration().ToString();
             StartTime = process.StartTime.ToString();
+            EndTime = "";
         }
     }
 }

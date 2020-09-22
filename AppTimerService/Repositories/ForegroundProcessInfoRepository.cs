@@ -40,8 +40,15 @@ namespace AppTimerService.Repositories
         }
 
         public ForegroundProcessInfoEntity GetById(int id) {
-            // TODO hanadle null
-            return (from process in _items where process.Id == id select process).Single();
+            foreach (var process in _items)
+            {
+                if (process.Id.Equals(id))
+                {
+                    return process;
+                }
+            }
+
+            return null;
         }
 
         public void AddItem(ForegroundProcessInfoEntity entity)

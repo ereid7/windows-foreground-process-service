@@ -23,7 +23,7 @@ namespace AppTimerService.Managers
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
 
-        private Dictionary<int, ForegroundProcessInfo> _processMap;
+        //private Dictionary<int, ForegroundProcessInfo> _processMap;
 
         /**
          * The moment of time that the current foreground
@@ -37,7 +37,6 @@ namespace AppTimerService.Managers
             _logger = logger;
             _processHelper = new ProcessHelper(_logger);
             _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
-            _processMap = new Dictionary<int, ForegroundProcessInfo>();
             InitializeForegroundProcessInfoRepository();
         }
 
@@ -53,15 +52,18 @@ namespace AppTimerService.Managers
             {
                 // update last
                 var lastForegroundProcess = _foregroundProcess;
+                if (lastForegroundProcess != null && _foregroundInfoRepository.GetById(lastForegroundProcess.Id) != null)
+                {
+                    // TODO track last foregroundtime in info
+                    UpdateForegroundProcessInfo(lastForegroundProcess);
+                }
+
                 // insert if new
                 _foregroundProcess = foregroundProcess;
                 if (_foregroundInfoRepository.GetById(_foregroundProcess.Id) == null)
                 {
-                    // create entity item, add, and update repository.
-                    // _foregroundInfoRepository.AddItem();
+                    InsertForegroundProcessInfo(_foregroundProcess);
                 }
-
-                // updateprocessmap
 
                 if (lastForegroundProcess != null)
                 {
@@ -69,6 +71,25 @@ namespace AppTimerService.Managers
                 }
                 _processForegroundTime = DateTime.Now;
             }
+        }
+
+        private void InsertForegroundProcessInfo(Process p)
+        {
+            // create entity item, add, and update repository.
+            var processInfo = new ForegroundProcessInfoEntity();
+            processInfo.Initialize(p);
+            _foregroundInfoRepository.AddItem(processInfo);
+            _foregroundInfoRepository.SaveChanges();
+        }
+
+        private void UpdateForegroundProcessInfo(Process p)
+        {
+            var processInfo = _foregroundInfoRepository.GetById(p.Id);
+            var foregroundDuration = TimeSpan.Parse(processInfo.ForegroundDuration);
+            foregroundDuration += (DateTime.Now - _processForegroundTime);
+            processInfo.ForegroundDuration = foregroundDuration.ToString();
+            _foregroundInfoRepository.UpdateItem(processInfo);
+            _foregroundInfoRepository.SaveChanges();
         }
 
         private void InitializeForegroundProcessInfoRepository()
