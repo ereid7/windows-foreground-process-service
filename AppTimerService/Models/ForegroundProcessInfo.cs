@@ -12,5 +12,6 @@ namespace AppTimerService.Models
         public TimeSpan ForegroundDuration;
         public TimeSpan ProcessDuration;
         public DateTime StartTime;
+        public DateTime EndTime;
     }
 }

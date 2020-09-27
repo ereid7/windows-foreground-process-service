@@ -62,6 +62,11 @@ namespace AppTimerService.Managers
                 _foregroundProcess = foregroundProcess;
                 if (_foregroundInfoRepository.GetById(_foregroundProcess.Id) == null)
                 {
+                    _foregroundProcess.Exited += (sender, e) =>
+                    {
+                        UpdateProcessExitTime(_foregroundProcess);
+                    };
+
                     InsertForegroundProcessInfo(_foregroundProcess);
                 }
 
@@ -90,6 +95,12 @@ namespace AppTimerService.Managers
             processInfo.ForegroundDuration = foregroundDuration.ToString();
             _foregroundInfoRepository.UpdateItem(processInfo);
             _foregroundInfoRepository.SaveChanges();
+        }
+
+        private void UpdateProcessExitTime(Process p)
+        {
+            var processInfo = _foregroundInfoRepository.GetById(p.Id);
+            processInfo.EndTime = p.ExitTime.ToString();
         }
 
         private void InitializeForegroundProcessInfoRepository()
