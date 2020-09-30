@@ -77,20 +77,5 @@ namespace AppTimerService.Repositories
                 sw.Close();
             }
         }
-
-        //public void Insert(ForegroundProcessInfo processInfo)
-        //{
-        //     _items.Add()
-        //}
-
-        //public void Insert(ForegroundProcessInfo processInfo)
-        //{
-
-        //}
-
-        //public Configuration GetById(object id)
-        //{
-        //    return (from c in configurations where c.Id == id select c).Single();
-        //}
     }
 }
