@@ -6,8 +6,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace AppTimerService.Managers
 {
@@ -54,7 +52,6 @@ namespace AppTimerService.Managers
                 var lastForegroundProcess = _foregroundProcess;
                 if (lastForegroundProcess != null && _foregroundInfoRepository.GetById(lastForegroundProcess.Id) != null)
                 {
-                    // TODO track last foregroundtime in info
                     UpdateForegroundProcessInfo(lastForegroundProcess);
                 }
 
@@ -62,11 +59,6 @@ namespace AppTimerService.Managers
                 _foregroundProcess = foregroundProcess;
                 if (_foregroundInfoRepository.GetById(_foregroundProcess.Id) == null)
                 {
-                    _foregroundProcess.Exited += (sender, e) =>
-                    {
-                        UpdateProcessExitTime(_foregroundProcess);
-                    };
-
                     InsertForegroundProcessInfo(_foregroundProcess);
                 }
 
@@ -95,12 +87,6 @@ namespace AppTimerService.Managers
             processInfo.ForegroundDuration = foregroundDuration.ToString();
             _foregroundInfoRepository.UpdateItem(processInfo);
             _foregroundInfoRepository.SaveChanges();
-        }
-
-        private void UpdateProcessExitTime(Process p)
-        {
-            var processInfo = _foregroundInfoRepository.GetById(p.Id);
-            processInfo.EndTime = p.ExitTime.ToString();
         }
 
         private void InitializeForegroundProcessInfoRepository()

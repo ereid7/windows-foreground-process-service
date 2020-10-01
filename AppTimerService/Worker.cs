@@ -16,25 +16,20 @@ namespace AppTimerService
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IDictionary<int, TrackedProcessInfo> _processIds;
-        private readonly DirectoryManager _directoryManager;
-
         private ForegroundProcessManager _foregroundHistoryManager;
 
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _processIds = new Dictionary<int, TrackedProcessInfo>();
-            _directoryManager = new DirectoryManager();
             _foregroundHistoryManager = new ForegroundProcessManager(_logger);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //// TODO initialize trackedP rocessInfo - 
-            //// https://stackoverflow.com/questions/32590428/how-can-i-get-the-process-name-of-the-current-active-window-in-windows-with-wina
             while (!stoppingToken.IsCancellationRequested)
             {
+                // TODO log startup time
+                // TODO config file for custom file save location, custom names, etc
 
                 // foreground tracking
                 _foregroundHistoryManager.UpdateForegroundProcess();
