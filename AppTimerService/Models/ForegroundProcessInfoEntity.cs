@@ -14,7 +14,7 @@ namespace AppTimerService.Models
         {
             Id = process.Id;
             ProcessName = process.ProcessName;
-            ForegroundDuration = TimeSpan.FromSeconds(0).ToString();
+            ForegroundDuration = TimeSpan.FromSeconds(0).ToString(@"hh\:mm\:ss\:fff");
         }
     }
 }

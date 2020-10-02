@@ -95,8 +95,7 @@ namespace AppTimerService.Managers
 
         private void LogForegroundProcessUpdate(Process lastProcess, Process newProcess)
         {
-            // TODO format duration
-            var duration = _processForegroundTime != null ? (DateTime.Now - _processForegroundTime).TotalSeconds : 0;
+            var duration = _processForegroundTime != null ? (DateTime.Now - _processForegroundTime): TimeSpan.FromSeconds(0);
             var newProcessName = string.IsNullOrEmpty(newProcess.MainWindowTitle) ? newProcess.ProcessName : newProcess.MainWindowTitle;
             var lastProcessName = string.IsNullOrEmpty(lastProcess.MainWindowTitle) ? lastProcess.ProcessName : lastProcess.MainWindowTitle;
 
@@ -104,7 +103,7 @@ namespace AppTimerService.Managers
                                                     newProcessName,
                                                     lastProcess.Id,
                                                     lastProcessName,
-                                                    duration.ToString());
+                                                    duration.ToString(@"hh\:mm\:ss\:fff"));
         }
     }
 }
