@@ -1,37 +1,36 @@
-﻿using AppTimerService.Models;
-using System;
+﻿using AppTimerService.Contracts.Models;
+using AppTimerService.Contracts.Repositories;
+using AppTimerService.Models;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace AppTimerService.Repositories
 {
-    public class ForegroundProcessInfoRepository 
+    public class ForegroundProcessInfoRepository : IForegroundProcessInfoRepository
     {
         //https://docs.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=netcore-3.1
         // https://github.com/SharpRepository/SharpRepository/blob/develop/SharpRepository.XmlRepository/XmlRepositoryBase.cs
         internal string FilePath { get; private set; }
-        private readonly List<ForegroundProcessInfoEntity> _items;
+        private readonly List<IForegroundProcessInfoEntity> _items;
 
         // TODO do not track duration when windows is locked
         public ForegroundProcessInfoRepository(string directoryPath) { 
         
             FilePath = $"{directoryPath}\\ForegroundProcessInfo.xml";
-            _items = new List<ForegroundProcessInfoEntity>();
+            _items = new List<IForegroundProcessInfoEntity>();
 
             if (!File.Exists(FilePath)) return;
 
             using (var stream = new FileStream(FilePath, FileMode.Open))
             using (StreamReader sr = new StreamReader(stream))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<ForegroundProcessInfoEntity>));
-                _items = (List<ForegroundProcessInfoEntity>)serializer.Deserialize(sr);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<IForegroundProcessInfoEntity>));
+                _items = (List<IForegroundProcessInfoEntity>)serializer.Deserialize(sr);
             }
         }
 
-        protected List<ForegroundProcessInfoEntity> Items
+        protected List<IForegroundProcessInfoEntity> Items
         {
             get
             {
@@ -39,7 +38,7 @@ namespace AppTimerService.Repositories
             }
         }
 
-        public ForegroundProcessInfoEntity GetById(int id) {
+        public IForegroundProcessInfoEntity GetById(int id) {
             foreach (var process in _items)
             {
                 if (process.Id.Equals(id))
@@ -51,12 +50,12 @@ namespace AppTimerService.Repositories
             return null;
         }
 
-        public void AddItem(ForegroundProcessInfoEntity entity)
+        public void AddItem(IForegroundProcessInfoEntity entity)
         {
             _items.Add(entity);
         }
 
-        public void UpdateItem(ForegroundProcessInfoEntity entity)
+        public void UpdateItem(IForegroundProcessInfoEntity entity)
         {
             var index = _items.FindIndex(x =>
             {

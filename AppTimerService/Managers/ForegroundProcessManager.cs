@@ -1,4 +1,5 @@
-﻿using AppTimerService.Loggers;
+﻿using AppTimerService.Contracts.Managers;
+using AppTimerService.Loggers;
 using AppTimerService.Models;
 using AppTimerService.Repositories;
 using AppTimerService.Utils;
@@ -10,7 +11,7 @@ using System.Diagnostics;
 namespace AppTimerService.Managers
 {
     // TODO save end time on process end
-    class ForegroundProcessManager : DirectoryManager
+    class ForegroundProcessManager : DirectoryManager, IForegroundProcessManager
     {
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
         private ForegroundProcessInfoRepository _foregroundInfoRepository;
@@ -20,8 +21,6 @@ namespace AppTimerService.Managers
 
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
-
-        //private Dictionary<int, ForegroundProcessInfo> _processMap;
 
         /**
          * The moment of time that the current foreground

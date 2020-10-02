@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AppTimerService.Contracts.Managers;
+using System;
 using System.IO;
-using System.Text;
 
 namespace AppTimerService.Managers
 {
-    public class DirectoryManager
+    public abstract class DirectoryManager : IDirectoryManager
     {
 
         protected readonly string _appTimerDataPath;
@@ -15,23 +14,23 @@ namespace AppTimerService.Managers
         public DirectoryManager()
         {
             var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            this._appTimerDataPath = $"{programDataPath}\\AppTimer";
+            _appTimerDataPath = $"{programDataPath}\\AppTimer";
 
-            this.initializeDirectoryManager();
+            InitializeDirectoryManager();
         }
 
-        private void initializeDirectoryManager()
+        private void InitializeDirectoryManager()
         {
-            this.verifyProgramDataDirectory();
-            this.verifyDailyDataDirectory();
+            VerifyProgramDataDirectory();
+            VerifyDailyDataDirectory();
         }
 
-        protected void verifyProgramDataDirectory()
+        protected void VerifyProgramDataDirectory()
         {
             Directory.CreateDirectory(this._appTimerDataPath);
         }
         
-        protected void verifyDailyDataDirectory()
+        protected void VerifyDailyDataDirectory()
         {
             Directory.CreateDirectory(this._dailyDataPath);
         }

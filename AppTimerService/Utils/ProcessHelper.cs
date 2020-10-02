@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AppTimerService.Contracts.Utils;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -9,7 +9,7 @@ namespace AppTimerService.Utils
     /**
      * https://gist.github.com/sparksbat/38d3a8c31f36d18cc497831631691067
      */
-    public class ProcessHelper
+    public class ProcessHelper : IProcessHelper
     {
         private readonly ILogger<Worker> _logger;
 

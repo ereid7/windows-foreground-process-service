@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AppTimerService.Contracts.Models;
+using System;
 
 namespace AppTimerService.Models
 {
-    class ForegroundProcessHistoryLog
+    class ForegroundProcessHistoryLog : IForegroundProcessHistoryLog
     {
         public DateTime TimeStamp { get; set; }
         public int NewProcessId { get; set; }

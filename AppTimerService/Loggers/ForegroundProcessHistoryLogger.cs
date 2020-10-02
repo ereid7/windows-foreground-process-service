@@ -1,17 +1,14 @@
-﻿using AppTimerService.Managers;
+﻿using AppTimerService.Contracts.Loggers;
 using AppTimerService.Models;
 using CsvHelper;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Text;
 
 namespace AppTimerService.Loggers
 {
-    public class ForegroundProcessHistoryLogger 
+    public class ForegroundProcessHistoryLogger : IForegroundProcessHistoryLogger
     {
         private readonly ILogger<Worker> _logger;
         private string _directoryPath;
