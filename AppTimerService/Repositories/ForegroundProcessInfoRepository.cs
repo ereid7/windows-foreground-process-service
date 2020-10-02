@@ -12,25 +12,25 @@ namespace AppTimerService.Repositories
         //https://docs.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=netcore-3.1
         // https://github.com/SharpRepository/SharpRepository/blob/develop/SharpRepository.XmlRepository/XmlRepositoryBase.cs
         internal string FilePath { get; private set; }
-        private readonly List<IForegroundProcessInfoEntity> _items;
+        private readonly List<ForegroundProcessInfoEntity> _items;
 
         // TODO do not track duration when windows is locked
         public ForegroundProcessInfoRepository(string directoryPath) { 
         
             FilePath = $"{directoryPath}\\ForegroundProcessInfo.xml";
-            _items = new List<IForegroundProcessInfoEntity>();
+            _items = new List<ForegroundProcessInfoEntity>();
 
             if (!File.Exists(FilePath)) return;
 
             using (var stream = new FileStream(FilePath, FileMode.Open))
             using (StreamReader sr = new StreamReader(stream))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<IForegroundProcessInfoEntity>));
-                _items = (List<IForegroundProcessInfoEntity>)serializer.Deserialize(sr);
+                XmlSerializer serializer = new XmlSerializer(typeof(List<ForegroundProcessInfoEntity>));
+                _items = (List<ForegroundProcessInfoEntity>)serializer.Deserialize(sr);
             }
         }
 
-        protected List<IForegroundProcessInfoEntity> Items
+        protected List<ForegroundProcessInfoEntity> Items
         {
             get
             {
@@ -52,7 +52,7 @@ namespace AppTimerService.Repositories
 
         public void AddItem(IForegroundProcessInfoEntity entity)
         {
-            _items.Add(entity);
+            _items.Add((ForegroundProcessInfoEntity)entity);
         }
 
         public void UpdateItem(IForegroundProcessInfoEntity entity)
@@ -63,7 +63,7 @@ namespace AppTimerService.Repositories
             });
             if (index >= 0)
             {
-                _items[index] = entity;
+                _items[index] = (ForegroundProcessInfoEntity)entity;
             }
         }
 
