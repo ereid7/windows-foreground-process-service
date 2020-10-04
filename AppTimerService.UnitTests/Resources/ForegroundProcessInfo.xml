@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfForegroundProcessInfoEntity xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ForegroundProcessInfoEntity>
+    <Id>13920</Id>
+    <ProcessName>VsDebugConsole</ProcessName>
+    <ForegroundDuration>00:00:03.0728273</ForegroundDuration>
+  </ForegroundProcessInfoEntity>
+  <ForegroundProcessInfoEntity>
+    <Id>5468</Id>
+    <ProcessName>firefox</ProcessName>
+    <ForegroundDuration>00:00:01.5132621</ForegroundDuration>
+  </ForegroundProcessInfoEntity>
+  <ForegroundProcessInfoEntity>
+    <Id>8400</Id>
+    <ProcessName>Discord</ProcessName>
+    <ForegroundDuration>00:00:05.0132722</ForegroundDuration>
+  </ForegroundProcessInfoEntity>
+  <ForegroundProcessInfoEntity>
+    <Id>6452</Id>
+    <ProcessName>devenv</ProcessName>
+    <ForegroundDuration>00:00:08.0255661</ForegroundDuration>
+  </ForegroundProcessInfoEntity>
+  <ForegroundProcessInfoEntity>
+    <Id>3212</Id>
+    <ProcessName>powershell</ProcessName>
+    <ForegroundDuration>00:00:00:000</ForegroundDuration>
+  </ForegroundProcessInfoEntity>
+</ArrayOfForegroundProcessInfoEntity>

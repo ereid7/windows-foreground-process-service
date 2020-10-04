@@ -1,4 +1,5 @@
 ﻿using AppTimerService.Contracts.Models;
+using System.Collections.Generic;
 
 namespace AppTimerService.Contracts.Repositories
 {

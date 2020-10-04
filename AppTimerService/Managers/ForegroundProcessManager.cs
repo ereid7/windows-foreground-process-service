@@ -61,6 +61,7 @@ namespace AppTimerService.Managers
                     InsertForegroundProcessInfo(_foregroundProcess);
                 }
 
+                // log update
                 if (lastForegroundProcess != null)
                 {
                     LogForegroundProcessUpdate(lastForegroundProcess, _foregroundProcess);

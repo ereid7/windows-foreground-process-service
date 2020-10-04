@@ -21,20 +21,20 @@ namespace AppTimerService.Repositories
             _items = new List<ForegroundProcessInfoEntity>();
 
             if (!File.Exists(FilePath)) return;
-
-            using (var stream = new FileStream(FilePath, FileMode.Open))
-            using (StreamReader sr = new StreamReader(stream))
+            
+            try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<ForegroundProcessInfoEntity>));
-                _items = (List<ForegroundProcessInfoEntity>)serializer.Deserialize(sr);
+                using (var stream = new FileStream(FilePath, FileMode.Open))
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<ForegroundProcessInfoEntity>));
+                    _items = (List<ForegroundProcessInfoEntity>)serializer.Deserialize(sr);
+                }
             }
-        }
-
-        protected List<ForegroundProcessInfoEntity> Items
-        {
-            get
+            catch
             {
-                return _items;
+                // TODO optimize
+                File.Delete(FilePath);
             }
         }
 
