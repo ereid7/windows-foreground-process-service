@@ -1,5 +1,4 @@
-﻿using AppTimerService.Contracts.Loggers;
-using AppTimerService.Models;
+﻿using AppTimerService.Models;
 using CsvHelper;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +7,7 @@ using System.IO;
 
 namespace AppTimerService.Loggers
 {
-    public class ForegroundProcessHistoryLogger : IForegroundProcessHistoryLogger
+    public class ForegroundProcessHistoryLogger
     {
         private readonly ILogger<Worker> _logger;
         private string _directoryPath;

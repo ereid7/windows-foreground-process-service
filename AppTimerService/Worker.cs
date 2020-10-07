@@ -11,6 +11,7 @@ using AppTimerService.Utils;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+// TODO remove interfaces. Unneded without unity
 namespace AppTimerService
 {
     public class Worker : BackgroundService

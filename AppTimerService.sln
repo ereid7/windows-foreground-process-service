@@ -5,9 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppTimerService", "AppTimerService\AppTimerService.csproj", "{0F7B102C-32BC-4921-A294-F978D01F6712}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppTimerService.Contracts", "AppTimerService.Contracts\AppTimerService.Contracts.csproj", "{035F2DD9-4DBD-4B36-8799-E5CBA029F858}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppTimerService.UnitTests", "AppTimerService.UnitTests\AppTimerService.UnitTests.csproj", "{1AAB0CD6-7967-4F30-828A-39D7D5C42B8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AppTimerService.UnitTests", "AppTimerService.UnitTests\AppTimerService.UnitTests.csproj", "{1AAB0CD6-7967-4F30-828A-39D7D5C42B8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		{0F7B102C-32BC-4921-A294-F978D01F6712}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F7B102C-32BC-4921-A294-F978D01F6712}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F7B102C-32BC-4921-A294-F978D01F6712}.Release|Any CPU.Build.0 = Release|Any CPU
-		{035F2DD9-4DBD-4B36-8799-E5CBA029F858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{035F2DD9-4DBD-4B36-8799-E5CBA029F858}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{035F2DD9-4DBD-4B36-8799-E5CBA029F858}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{035F2DD9-4DBD-4B36-8799-E5CBA029F858}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1AAB0CD6-7967-4F30-828A-39D7D5C42B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1AAB0CD6-7967-4F30-828A-39D7D5C42B8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1AAB0CD6-7967-4F30-828A-39D7D5C42B8A}.Release|Any CPU.ActiveCfg = Release|Any CPU

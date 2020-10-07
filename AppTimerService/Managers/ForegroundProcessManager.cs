@@ -1,5 +1,4 @@
-﻿using AppTimerService.Contracts.Managers;
-using AppTimerService.Loggers;
+﻿using AppTimerService.Loggers;
 using AppTimerService.Models;
 using AppTimerService.Repositories;
 using AppTimerService.Utils;
@@ -11,7 +10,7 @@ using System.Diagnostics;
 namespace AppTimerService.Managers
 {
     // TODO save end time on process end
-    class ForegroundProcessManager : DirectoryManager, IForegroundProcessManager
+    class ForegroundProcessManager : DirectoryManager
     {
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
         private ForegroundProcessInfoRepository _foregroundInfoRepository;

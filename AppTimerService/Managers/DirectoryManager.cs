@@ -1,10 +1,9 @@
-﻿using AppTimerService.Contracts.Managers;
-using System;
+﻿using System;
 using System.IO;
 
 namespace AppTimerService.Managers
 {
-    public abstract class DirectoryManager : IDirectoryManager
+    public abstract class DirectoryManager 
     {
 
         protected readonly string _appTimerDataPath;

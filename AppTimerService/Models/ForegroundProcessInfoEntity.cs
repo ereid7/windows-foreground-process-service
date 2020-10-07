@@ -1,10 +1,9 @@
-﻿using AppTimerService.Contracts.Models;
-using System;
+﻿using System;
 using System.Diagnostics;
 
 namespace AppTimerService.Models
 {
-    public class ForegroundProcessInfoEntity : IForegroundProcessInfoEntity
+    public class ForegroundProcessInfoEntity 
     {
         public int Id { get; set; }
         public string ProcessName { get; set; }

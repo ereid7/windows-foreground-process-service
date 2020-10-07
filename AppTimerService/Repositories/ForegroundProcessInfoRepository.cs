@@ -1,13 +1,11 @@
-﻿using AppTimerService.Contracts.Models;
-using AppTimerService.Contracts.Repositories;
-using AppTimerService.Models;
+﻿using AppTimerService.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-
+// TODO add date to xml filename
 namespace AppTimerService.Repositories
 {
-    public class ForegroundProcessInfoRepository : IForegroundProcessInfoRepository
+    public class ForegroundProcessInfoRepository 
     {
         //https://docs.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=netcore-3.1
         // https://github.com/SharpRepository/SharpRepository/blob/develop/SharpRepository.XmlRepository/XmlRepositoryBase.cs
@@ -38,7 +36,15 @@ namespace AppTimerService.Repositories
             }
         }
 
-        public IForegroundProcessInfoEntity GetById(int id) {
+        public List<ForegroundProcessInfoEntity> Items
+        {
+            get
+            {
+                return _items as List<ForegroundProcessInfoEntity>; 
+            }
+        }
+
+        public ForegroundProcessInfoEntity GetById(int id) {
             foreach (var process in _items)
             {
                 if (process.Id.Equals(id))
@@ -50,12 +56,12 @@ namespace AppTimerService.Repositories
             return null;
         }
 
-        public void AddItem(IForegroundProcessInfoEntity entity)
+        public void AddItem(ForegroundProcessInfoEntity entity)
         {
-            _items.Add((ForegroundProcessInfoEntity)entity);
+            _items.Add(entity);
         }
 
-        public void UpdateItem(IForegroundProcessInfoEntity entity)
+        public void UpdateItem(ForegroundProcessInfoEntity entity)
         {
             var index = _items.FindIndex(x =>
             {
@@ -63,7 +69,7 @@ namespace AppTimerService.Repositories
             });
             if (index >= 0)
             {
-                _items[index] = (ForegroundProcessInfoEntity)entity;
+                _items[index] = entity;
             }
         }
 
