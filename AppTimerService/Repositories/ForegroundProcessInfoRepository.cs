@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+
 // TODO add date to xml filename
 namespace AppTimerService.Repositories
 {
@@ -65,7 +66,7 @@ namespace AppTimerService.Repositories
         {
             var index = _items.FindIndex(x =>
             {
-                return x.Equals(entity.Id);
+                return x.Id.Equals(entity.Id);
             });
             if (index >= 0)
             {

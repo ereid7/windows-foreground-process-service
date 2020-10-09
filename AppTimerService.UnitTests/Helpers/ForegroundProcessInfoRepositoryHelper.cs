@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AppTimerService.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace AppTimerService.UnitTests.Helpers
@@ -23,14 +25,42 @@ namespace AppTimerService.UnitTests.Helpers
             }
             catch (IOException iox)
             {
-                // TODO handle
+                Console.WriteLine(iox.Message);
             }
+        }
+
+        public bool ListContains(List<ForegroundProcessInfoEntity> l1, ForegroundProcessInfoEntity e1)
+        {
+            var idx = l1.FindIndex((item) =>
+            {
+                return EntitiesEqual(e1, item);
+            });
+
+            return idx > -1;
+        }
+
+        public ForegroundProcessInfoEntity CreateMockEntity(int id)
+        {
+            var foregroundProcessInfoEntity = new ForegroundProcessInfoEntity();
+            foregroundProcessInfoEntity.Id = id;
+            foregroundProcessInfoEntity.ProcessName = "mockProcessName";
+            foregroundProcessInfoEntity.ForegroundDuration = "00:00:77:777";
+
+            return foregroundProcessInfoEntity;
+        }
+
+        private bool EntitiesEqual(ForegroundProcessInfoEntity e1, ForegroundProcessInfoEntity e2)
+        {
+            return e1.Id.Equals(e2.Id) &&
+                   e1.ProcessName.Equals(e2.ProcessName) &&
+                   e1.ForegroundDuration.Equals(e2.ForegroundDuration);
         }
 
         private string CreateTempDirectory()
         {
             string tempDirectory = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             Directory.CreateDirectory(tempDirectory);
+
             return tempDirectory;
         }
 
