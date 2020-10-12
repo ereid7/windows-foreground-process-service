@@ -17,4 +17,8 @@
     <ProjectReference Include="..\AppTimerService\AppTimerService.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

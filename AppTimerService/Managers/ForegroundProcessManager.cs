@@ -6,17 +6,22 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace AppTimerService.Managers
 {
     // TODO save end time on process end
-    class ForegroundProcessManager : DirectoryManager
+    class ForegroundProcessManager 
     {
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
         private ForegroundProcessInfoRepository _foregroundInfoRepository;
         private readonly ILogger<Worker> _logger;
         private Process _foregroundProcess;
         private ProcessHelper _processHelper;
+
+        // directory paths
+        private readonly string _dataPath;
+        private string _dailyDataPath => $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
 
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
@@ -30,6 +35,10 @@ namespace AppTimerService.Managers
         public ForegroundProcessManager(ILogger<Worker> logger)
         {
             // TODO do not pass daily path, but compute each time something is logged.
+            var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            _dataPath = $"{programDataPath}\\ForegroundAppTracker";
+            InitializeDirectories();
+
             _logger = logger;
             _processHelper = new ProcessHelper(_logger);
             _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
@@ -86,6 +95,12 @@ namespace AppTimerService.Managers
             processInfo.ForegroundDuration = foregroundDuration.ToString();
             _foregroundInfoRepository.UpdateItem(processInfo);
             _foregroundInfoRepository.SaveChanges();
+        }
+
+        private void InitializeDirectories()
+        {
+            Directory.CreateDirectory(this._dataPath);
+            Directory.CreateDirectory(this._dailyDataPath);
         }
 
         private void InitializeForegroundProcessInfoRepository()
