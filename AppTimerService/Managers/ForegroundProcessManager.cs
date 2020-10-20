@@ -21,7 +21,7 @@ namespace AppTimerService.Managers
 
         // directory paths
         private readonly string _dataPath;
-        private string _dailyDataPath => $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
+        private string _dailyDataPath;
 
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
@@ -32,16 +32,31 @@ namespace AppTimerService.Managers
          */
         private DateTime _processForegroundTime;
 
+        public string DailyDataPath
+        {
+            get { return _dailyDataPath; }
+            set
+            {
+                _dailyDataPath = value;
+
+                InitializeDailyDataDirectory();
+                InitializeForegoundProcessHistoryLogger();
+            }
+        }
+
         public ForegroundProcessManager(ILogger<Worker> logger)
         {
             // TODO do not pass daily path, but compute each time something is logged.
             var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
             _dataPath = $"{programDataPath}\\ForegroundAppTracker";
-            InitializeDirectories();
+            _dailyDataPath = $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
+
+            InitializeDataDirectory();
+            InitializeDailyDataDirectory();
 
             _logger = logger;
             _processHelper = new ProcessHelper(_logger);
-            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
+            InitializeForegoundProcessHistoryLogger();
             InitializeForegroundProcessInfoRepository();
         }
 
@@ -49,6 +64,8 @@ namespace AppTimerService.Managers
         // TODO have process setter with logic. Different method that gets foreground process
         public void UpdateForegroundProcess()
         {
+            UpdateDailyDirectoryPath();
+
             var foregroundProcess = _processHelper.GetForegroundProcess();
             if (foregroundProcess == null) { return; }
 
@@ -97,15 +114,34 @@ namespace AppTimerService.Managers
             _foregroundInfoRepository.SaveChanges();
         }
 
-        private void InitializeDirectories()
+        private void InitializeDataDirectory()
         {
-            Directory.CreateDirectory(this._dataPath);
-            Directory.CreateDirectory(this._dailyDataPath);
+            Directory.CreateDirectory(_dataPath);
+        }
+
+        private void InitializeDailyDataDirectory()
+        {
+            Directory.CreateDirectory(_dailyDataPath);
+        }
+
+        // TODO create sepearate class for directory operations.
+        private void UpdateDailyDirectoryPath()
+        {
+            var date = DateTime.ParseExact(_dailyDataPath.Substring(_dailyDataPath.Length - 10), "dd-MM-yyyy", null);
+            if (date != DateTime.Today)
+            {
+                DailyDataPath = $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
+            }
         }
 
         private void InitializeForegroundProcessInfoRepository()
         {
             _foregroundInfoRepository = new ForegroundProcessInfoRepository(_dailyDataPath);
+        }
+
+        private void InitializeForegoundProcessHistoryLogger()
+        {
+            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
         }
 
         private void LogForegroundProcessUpdate(Process lastProcess, Process newProcess)
