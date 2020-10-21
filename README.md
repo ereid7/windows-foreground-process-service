@@ -1,4 +1,4 @@
-# Windows Foreground Application Tracking/Logging Service
+# Windows Foreground Process Tracking/Logging Service
 
 ## Description
 A .NET Core Worker Service used for logging foreground process history and tracking foreground process duration.
