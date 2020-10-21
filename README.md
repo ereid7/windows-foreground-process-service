@@ -13,3 +13,8 @@ A .NET Core Worker Service used for logging foreground process history and track
 
 ## Unit Tests
 Unit tests live in the `AppTimerService.UnitTests` project
+
+# TODO
+- Create application for viewing foreground process information stored by service
+- Create powershell installer for executable
+- Finish unit tests
