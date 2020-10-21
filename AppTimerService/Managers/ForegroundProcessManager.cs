@@ -13,15 +13,12 @@ namespace AppTimerService.Managers
     // TODO save end time on process end
     class ForegroundProcessManager 
     {
+        private DirectoryManager _directoryManager;
         private ForegroundProcessHistoryLogger _foregroundHistoryLogger;
         private ForegroundProcessInfoRepository _foregroundInfoRepository;
         private readonly ILogger<Worker> _logger;
         private Process _foregroundProcess;
         private ProcessHelper _processHelper;
-
-        // directory paths
-        private readonly string _dataPath;
-        private string _dailyDataPath;
 
         private readonly List<int> _ignoredProcessIds;
         private readonly List<string> _ignoredProcessNames;
@@ -32,29 +29,10 @@ namespace AppTimerService.Managers
          */
         private DateTime _processForegroundTime;
 
-        public string DailyDataPath
-        {
-            get { return _dailyDataPath; }
-            set
-            {
-                _dailyDataPath = value;
-
-                InitializeDailyDataDirectory();
-                InitializeForegoundProcessHistoryLogger();
-            }
-        }
-
         public ForegroundProcessManager(ILogger<Worker> logger)
         {
-            // TODO do not pass daily path, but compute each time something is logged.
-            var programDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            _dataPath = $"{programDataPath}\\ForegroundAppTracker";
-            _dailyDataPath = $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
-
-            InitializeDataDirectory();
-            InitializeDailyDataDirectory();
-
             _logger = logger;
+            _directoryManager = new DirectoryManager(logger);
             _processHelper = new ProcessHelper(_logger);
             InitializeForegoundProcessHistoryLogger();
             InitializeForegroundProcessInfoRepository();
@@ -64,7 +42,8 @@ namespace AppTimerService.Managers
         // TODO have process setter with logic. Different method that gets foreground process
         public void UpdateForegroundProcess()
         {
-            UpdateDailyDirectoryPath();
+            // UpdateDailyDirectoryPath();
+
 
             var foregroundProcess = _processHelper.GetForegroundProcess();
             if (foregroundProcess == null) { return; }
@@ -114,34 +93,14 @@ namespace AppTimerService.Managers
             _foregroundInfoRepository.SaveChanges();
         }
 
-        private void InitializeDataDirectory()
-        {
-            Directory.CreateDirectory(_dataPath);
-        }
-
-        private void InitializeDailyDataDirectory()
-        {
-            Directory.CreateDirectory(_dailyDataPath);
-        }
-
-        // TODO create sepearate class for directory operations.
-        private void UpdateDailyDirectoryPath()
-        {
-            var date = DateTime.ParseExact(_dailyDataPath.Substring(_dailyDataPath.Length - 10), "dd-MM-yyyy", null);
-            if (date != DateTime.Today)
-            {
-                DailyDataPath = $"{_dataPath}\\{DateTime.Today.ToString("dd-MM-yyyy")}";
-            }
-        }
-
         private void InitializeForegroundProcessInfoRepository()
         {
-            _foregroundInfoRepository = new ForegroundProcessInfoRepository(_dailyDataPath);
+            _foregroundInfoRepository = new ForegroundProcessInfoRepository(_directoryManager.DailyDataPath);
         }
 
         private void InitializeForegoundProcessHistoryLogger()
         {
-            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _dailyDataPath);
+            _foregroundHistoryLogger = new ForegroundProcessHistoryLogger(_logger, _directoryManager.DailyDataPath);
         }
 
         private void LogForegroundProcessUpdate(Process lastProcess, Process newProcess)
